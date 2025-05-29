@@ -323,7 +323,7 @@ export default function Home() {
               </div>
               <div className="glass p-6 bg-white/10 border-t border-white/20">
                 <h3 className="font-heading font-bold text-white mb-2 text-xl">Carport + Borne de recharge</h3>
-                <p className="text-gray-300">Mobilité électrique et production d'énergie</p>
+                <p className="text-gray-300">Mobilité électrique et production d&apos;énergie</p>
                 <div className="flex items-center mt-4 space-x-2">
                   <div className="w-2 h-2 bg-solar-green rounded-full"></div>
                   <span className="text-sm text-gray-400">Projet terminé</span>
