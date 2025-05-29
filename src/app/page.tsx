@@ -1,15 +1,10 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+// import { useState } from 'react'
 
 export default function Home() {
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    setIsVisible(true)
-  }, [])
-
+  
   const activities = [
     { name: 'Panneaux solaires', href: '/panneaux-solaires', icon: '☀️', color: 'from-yellow-400 to-orange-500' },
     { name: 'Bornes de recharge', href: '/bornes-recharge', icon: '🔌', color: 'from-blue-400 to-blue-600' },
