@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 export default function Home() {
@@ -23,19 +24,19 @@ export default function Home() {
       {/* Hero Section with Video Background */}
       <section className="relative min-h-screen flex items-center justify-center">
         {/* Background Video/GIF Container */}
-        <div className="absolute inset-0 z-0">
-          {/* Replace this div with your video/gif */}
-          <div className="w-full h-full bg-gradient-to-br from-blue-900 via-blue-600 to-cyan-400 opacity-90"></div>
-          {/* Uncomment and add your video/gif here:
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            className="w-full h-full object-cover"
-          >
-            <source src="/your-background-video.mp4" type="video/mp4" />
-          </video>
-          */}
+          <div className="absolute inset-0 z-0">
+            {/* Add your solar/construction GIF here */}
+            <Image 
+              src="/solar-background.gif" 
+              alt="Solar panels animation" 
+              fill
+              className="object-cover"
+              priority
+            />
+            
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-black/40"></div>
+          </div>
           
           {/* Animated overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-transparent to-solar-blue/70"></div>
@@ -55,17 +56,18 @@ export default function Home() {
               ></div>
             ))}
           </div>
-        </div>
 
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 text-center text-white">
           <div className="max-w-5xl mx-auto">
             {/* Logo */}
             <div className="mb-8">
-              <img 
+              <Image 
                 src="/logo-dynamaison.png" 
                 alt="DynaMaison Logo" 
-                className="h-24 md:h-32 mx-auto mb-4"
+                width={128}
+                height={128}
+                className="mx-auto mb-4"
               />
             </div>
             
@@ -139,12 +141,12 @@ export default function Home() {
                 <div className="bg-gradient-to-r from-solar-blue to-primary-900 text-white p-8 rounded-2xl hover-lift">
                   <h3 className="text-2xl font-heading font-bold mb-4">Notre Vision</h3>
                   <p className="text-lg leading-relaxed">
-                    « Chaque projet est différent et nécessite une analyse complète des besoins de chacun »
+                    « Chaque projet est diffrent et necessite une analyse complète des besoins de chacun »
                   </p>
                 </div>
                 
                 <div className="bg-gradient-to-r from-solar-green to-green-600 text-white p-8 rounded-2xl hover-lift">
-                  <h3 className="text-2xl font-heading font-bold mb-4">Notre Origine</h3>
+                  <h3 className="text-2xl font-headinge font-bold mb-4">Notre Origine</h3>
                   <p className="leading-relaxed">
                     Parc naturel régional du Haut-Jura, Lavans-lès-St Claude
                   </p>
