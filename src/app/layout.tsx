@@ -15,8 +15,13 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'DynaMaison - Solutions photovoltaïques et aménagements extérieurs',
-  description: 'Spécialistes en panneaux solaires, bornes de recharge, pergolas, carports, poolhouses et cuisines extérieures. Charles et Mohamed, électriciens de métier dans le Haut-Jura.',
+  title: 'DynaMaison - Solutions photovoltaïques',
+  description: 'Électriciens spécialisés dans les solutions renouvelables dans le Haut-Jura',
+  icons: {
+    icon: '/images/DynaMaisonLogo.png',
+    shortcut: '/images/logo/logo-dynamaison.png',
+    apple: '/images/logo/logo-dynamaison.png',
+  },
 }
 
 export default function RootLayout({
