@@ -19,19 +19,19 @@ export default function Home() {
       {/* Hero Section with Video Background */}
       <section className="relative min-h-screen flex items-center justify-center">
         {/* Background Video/GIF Container */}
-          <div className="absolute inset-0 z-0">
+          {/* <div className="absolute inset-0 z-0"> */}
             {/* Add your solar/construction GIF here */}
-            <Image 
+            {/* <Image 
               src="/solar-background.gif" 
               alt="Solar panels animation" 
               fill
               className="object-cover"
               priority
-            />
+            /> */}
             
             {/* Dark overlay for text readability */}
             <div className="absolute inset-0 bg-black/40"></div>
-          </div>
+          {/* </div> */}
           
           {/* Animated overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-transparent to-solar-blue/70"></div>
@@ -54,18 +54,6 @@ export default function Home() {
 
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 text-center text-white">
-          <div className="max-w-5xl mx-auto">
-            {/* Logo */}
-            <div className="mb-8">
-              <Image 
-                src="/logo-dynamaison.png" 
-                alt="DynaMaison Logo" 
-                width={128}
-                height={128}
-                className="mx-auto mb-4"
-              />
-            </div>
-            
             <h1 className="text-5xl md:text-7xl font-heading font-bold mb-6 text-white">
               DynaMaison
             </h1>
@@ -92,8 +80,6 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        </div>
-
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
           <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
