@@ -4,7 +4,15 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
 export default function Home() {
-  const [particles, setParticles] = useState([])
+  type Particle = {
+  id: number
+  left: number
+  top: number
+  delay: number
+  duration: number
+}
+
+const [particles, setParticles] = useState<Particle[]>([])
 
   useEffect(() => {
     const generatedParticles = [...Array(20)].map((_, i) => ({
