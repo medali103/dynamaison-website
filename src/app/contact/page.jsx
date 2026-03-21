@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react'
 
 export default function Contact() {
   const [particles, setParticles] = useState([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState({ type: '', message: '' })
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,16 +28,57 @@ export default function Contact() {
   }, [])
 
   const handleChange = (e) => {
+    if (submitStatus.message) {
+      setSubmitStatus({ type: '', message: '' })
+    }
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log('Form submitted:', formData)
+
+    setIsSubmitting(true)
+    setSubmitStatus({ type: '', message: '' })
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data?.error || "L'envoi du message a échoué.")
+      }
+
+      setSubmitStatus({
+        type: 'success',
+        message: 'Votre message a bien été envoyé. Nous vous répondrons rapidement.'
+      })
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        service: '',
+        message: ''
+      })
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: error.message || "L'envoi du message a échoué."
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const contactInfo = [
@@ -343,10 +386,23 @@ export default function Contact() {
 
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="w-full bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
                   >
-                    Envoyer le message
+                    {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
                   </button>
+
+                  {submitStatus.message && (
+                    <div
+                      className={`rounded-xl border px-4 py-3 text-sm ${
+                        submitStatus.type === 'success'
+                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                          : 'border-red-200 bg-red-50 text-red-700'
+                      }`}
+                    >
+                      {submitStatus.message}
+                    </div>
+                  )}
 
                   <p className="text-sm text-gray-600 text-center">
                     * Champs obligatoires
