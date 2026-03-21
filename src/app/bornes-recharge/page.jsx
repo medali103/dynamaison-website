@@ -30,31 +30,33 @@ export default function BornesRecharge() {
       color: 'from-blue-500 to-cyan-500',
       description: 'Solutions de recharge pour particuliers',
       power: '7 à 22 kW',
+      image: '/images/bornes-docx/image3.jpeg',
       features: [
         'Installation murale ou sur pied',
         'Programmation horaire intelligente',
         'Application mobile de suivi',
         'Compatible tous véhicules électriques',
-        'Garantie 3 ans constructeur'
+        'Garantie 2 ans'
       ]
     },
     {
       id: 'commercial',
-      name: 'Entreprise',
+      name: 'Commerce et entreprise',
       icon: (
         <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
         </svg>
       ),
       color: 'from-purple-500 to-pink-500',
-      description: 'Bornes pour parkings d\'entreprise',
-      power: '7 à 50 kW',
+      description: 'Bornes pour parkings de commerce et d’entreprise',
+      power: 'Tous types de puissance AC',
+      image: '/images/bornes-docx/image4.jpeg',
       features: [
         'Gestion multi-utilisateurs',
         'Système de facturation intégré',
         'Monitoring à distance',
-        'Installation de 2 à 50+ bornes',
-        'Maintenance préventive incluse'
+        'Installation de plusieurs bornes',
+        'Paiement par carte bancaire'
       ]
     },
     {
@@ -69,12 +71,13 @@ export default function BornesRecharge() {
       color: 'from-green-500 to-emerald-600',
       description: 'Infrastructures de recharge publique',
       power: '22 à 150 kW',
+      image: '/images/bornes-docx/image5.jpeg',
       features: [
-        'Bornes rapides DC',
-        'Paiement par carte bancaire',
-        'Supervision centralisée',
-        'Conformité IRVE',
-        'Résistant aux intempéries'
+        'Gestion multi-utilisateurs',
+        'Système de facturation intégré',
+        'Monitoring à distance',
+        'Installation de plusieurs bornes',
+        'Paiement par carte bancaire'
       ]
     }
   ]
@@ -166,11 +169,6 @@ export default function BornesRecharge() {
     }
   ]
 
-  const brands = [
-    'Tesla', 'Renault', 'Peugeot', 'Volkswagen', 'BMW', 'Audi', 'Mercedes',
-    'Nissan', 'Hyundai', 'Kia', 'Porsche', 'Volvo', 'Ford', 'Citroën'
-  ]
-
   return (
     <main className="overflow-hidden">
       {/* Hero Section with Background Image */}
@@ -249,85 +247,47 @@ export default function BornesRecharge() {
             {[
               { value: '7-22kW', label: 'Puissance' },
               { value: '<24h', label: 'Installation' },
-              { value: '3 ans', label: 'Garantie' },
-              { value: '100%', label: 'Compatible' }
+              { value: '2 ans', label: 'Garantie' },
+              { value: 'Recharge Elec+ et Garantie décennale', label: 'Certifiés', logos: true }
             ].map((stat, i) => (
               <div key={i} className="glass p-6 rounded-2xl border border-white/20 bg-white/5">
-                <div className="text-3xl font-bold text-cyan-400 mb-2">{stat.value}</div>
-                <div className="text-sm text-gray-300">{stat.label}</div>
+                {stat.logos ? (
+                  <>
+                    <div className="mb-3 flex items-center justify-center gap-3">
+                      <div className="rounded-xl bg-white/95 p-2">
+                        <Image
+                          src="/images/bornes-docx/image2.jpeg"
+                          alt="Logo Recharge Elec+"
+                          width={70}
+                          height={35}
+                          className="h-8 w-auto object-contain"
+                        />
+                      </div>
+                      <div className="rounded-xl bg-white/95 p-2">
+                        <Image
+                          src="/images/bornes-docx/image1.jpg"
+                          alt="Logo Garantie décennale"
+                          width={44}
+                          height={44}
+                          className="h-11 w-11 object-contain"
+                        />
+                      </div>
+                    </div>
+                    <div className="text-sm font-bold text-cyan-300 leading-snug">{stat.value}</div>
+                    <div className="mt-2 text-xs uppercase tracking-[0.2em] text-gray-300">{stat.label}</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-3xl font-bold text-cyan-400 mb-2">{stat.value}</div>
+                    <div className="text-sm text-gray-300">{stat.label}</div>
+                  </>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
       
-      {/* Car Brand Compatibility Section */}
-<section className="py-20 bg-white relative overflow-hidden">
-  <div className="container mx-auto px-4">
-    <div className="text-center mb-16">
-      <h2 className="text-4xl md:text-6xl font-heading font-bold mb-6">
-        Compatible avec{" "}
-        <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-          tous les véhicules
-        </span>
-      </h2>
-      <div className="w-32 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full mb-6"></div>
-      <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-        Nos bornes fonctionnent avec toutes les marques de véhicules électriques et hybrides
-      </p>
-    </div>
-
-    {/* Brand Logos Grid */}
-    <div className="max-w-6xl mx-auto">
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 mb-12">
-        {[
-          { name: "Tesla", icon: "tesla" },
-          { name: "Renault", icon: "renault" },
-          { name: "Peugeot", icon: "peugeot" },
-          { name: "Volkswagen", icon: "volkswagen" },
-          { name: "BMW", icon: "bmw" },
-          { name: "Audi", icon: "audi" },
-          { name: "Mercedes", icon: "mercedes" },
-          { name: "Nissan", icon: "nissan" },
-          { name: "Hyundai", icon: "hyundai" },
-          { name: "Kia", icon: "kia" },
-          { name: "Porsche", icon: "porsche" },
-          { name: "Volvo", icon: "volvo" },
-          { name: "Ford", icon: "ford" },
-          { name: "Citroën", icon: "citroen" },
-        ].map((brand, index) => (
-          <div
-            key={brand.name}
-            className="glass p-6 rounded-2xl hover-lift border border-gray-200 bg-white group"
-            style={{ animationDelay: `${index * 0.05}s` }}
-          >
-            <div className="relative h-16 mb-3 flex items-center justify-center">
-              <div className="w-16 h-16 rounded-xl overflow-hidden flex items-center justify-center bg-white">
-                <img
-                  src={`https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${brand.icon}.svg`}
-                  alt={`${brand.name} logo`}
-                  className="w-10 h-10 grayscale group-hover:grayscale-0 transition-all duration-300"
-                  loading="lazy"
-                  onError={(e) => {
-                    // fallback: if an icon name ever fails, just hide the image
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-              </div>
-            </div>
-            <h3 className="text-center font-bold text-gray-700 group-hover:text-cyan-600 transition-colors">
-              {brand.name}
-            </h3>
-          </div>
-        ))}
-      </div>
-
-      {/* Type 2 Info */}
-     
-    </div>
-  </div>
-</section>
-
 
       {/* Benefits Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
@@ -418,13 +378,7 @@ export default function BornesRecharge() {
                     {/* Left: Image */}
                     <div className="relative h-80 rounded-2xl overflow-hidden group">
                       <Image
-                        src={
-                          type.id === 'residential' 
-                            ? 'https://images.unsplash.com/photo-1617704548623-340376564e68?w=800&q=80'
-                            : type.id === 'commercial'
-                            ? 'https://images.unsplash.com/photo-1611484670691-1979ea5e8932?w=800&q=80'
-                            : 'https://images.unsplash.com/photo-1617788138017-94fcb0ebf7fc?w=800&q=80'
-                        }
+src={type.image}
                         alt={type.name}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -489,42 +443,6 @@ export default function BornesRecharge() {
         </div>
       </section>
 
-      {/* Compatibilité Section */}
-      <section className="py-20 bg-white relative overflow-hidden">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-heading font-bold text-primary-900 mb-6">
-              Compatible avec <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">tous les véhicules</span>
-            </h2>
-            <div className="w-32 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full mb-6"></div>
-            <p className="text-xl text-gray-700">
-              Nos bornes fonctionnent avec toutes les marques de véhicules électriques et hybrides
-            </p>
-          </div>
-
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
-              {brands.map((brand, index) => (
-                <div
-                  key={brand}
-                  className="glass p-6 rounded-2xl hover-lift border border-gray-200 bg-white flex items-center justify-center group"
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  <p className="font-bold text-gray-700 group-hover:text-cyan-600 transition-colors">
-                    {brand}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <p className="text-gray-600 text-lg">
-                <span className="font-bold text-cyan-600">Type 2</span> et <span className="font-bold text-cyan-600">Type 2 Combo</span> (CCS) inclus
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Installation Process */}
       <section className="py-20 bg-gradient-to-br from-gray-100 to-white relative overflow-hidden">
@@ -593,7 +511,7 @@ export default function BornesRecharge() {
                   <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h4 className="font-bold text-primary-900 mb-2">Garantie 3 ans</h4>
+              <h4 className="font-bold text-primary-900 mb-2">Garantie 2 ans</h4>
               <p className="text-gray-600">Pièces et main d'œuvre</p>
             </div>
 
@@ -630,7 +548,7 @@ export default function BornesRecharge() {
             </h2>
             <div className="w-32 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto rounded-full mb-8"></div>
             <p className="text-xl md:text-2xl text-gray-200 mb-12 leading-relaxed">
-              Obtenez un devis gratuit en 48h et profitez des aides financières
+              Obtenez un devis gratuit et profitez des aides financières
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">

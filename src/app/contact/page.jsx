@@ -46,8 +46,8 @@ export default function Contact() {
         </svg>
       ),
       title: 'Téléphone',
-      content: '+33 (0)X XX XX XX XX',
-      link: 'tel:+33XXXXXXXXX',
+      content: '06 47 16 93 17',
+      link: 'tel:+33647169317',
       color: 'from-blue-500 to-cyan-600'
     },
     {
@@ -69,7 +69,7 @@ export default function Contact() {
         </svg>
       ),
       title: 'Adresse',
-      content: 'Lavans-lès-St Claude, Haut-Jura',
+      content: '1096 route du Haut Jura, 39170 Lavans-lès-Saint-Claude',
       link: 'https://maps.google.com',
       color: 'from-emerald-500 to-teal-600'
     },
@@ -80,7 +80,7 @@ export default function Contact() {
         </svg>
       ),
       title: 'Horaires',
-      content: 'Lun - Ven: 9h - 18h\nSam: Sur rendez-vous',
+      content: 'Lundi-Samedi : Sur rendez-vous\nDimanche : Fermé',
       link: null,
       color: 'from-orange-500 to-red-600'
     }
@@ -103,7 +103,7 @@ export default function Contact() {
         </svg>
       ),
       title: 'Réponse rapide',
-      description: 'Sous 24h ouvrées'
+      description: 'Dans les plus brefs délais'
     },
     {
       icon: (
@@ -360,7 +360,7 @@ export default function Contact() {
                   Pourquoi nous <span className="bg-gradient-to-r from-indigo-600 to-purple-700 bg-clip-text text-transparent">choisir</span> ?
                 </h2>
                 <p className="text-gray-700 mb-8 text-lg">
-                  DynaMaison, c'est l'expertise et la passion au service de vos projets dans le Haut-Jura.
+                  DynaMaison, c'est l'expertise et la passion au service de vos projets.
                 </p>
 
                 <div className="space-y-6 mb-8">
@@ -415,7 +415,7 @@ export default function Contact() {
             </h2>
             <div className="w-32 h-1 bg-gradient-to-r from-indigo-500 to-purple-600 mx-auto rounded-full mb-6"></div>
             <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-              Showroom et atelier situés au cœur du Haut-Jura
+              Showroom situé au cœur du Haut-Jura
             </p>
           </div>
 
@@ -447,7 +447,7 @@ export default function Contact() {
                     <div>
                       <h3 className="text-xl font-bold text-primary-900 mb-2">Showroom</h3>
                       <p className="text-gray-700 leading-relaxed">
-                        Venez découvrir nos réalisations et nos produits dans notre espace d'exposition moderne.
+                        Venez découvrir nos produits dans notre espace d'exposition moderne.
                       </p>
                       <p className="text-sm text-indigo-600 font-semibold mt-2">
                         Sur rendez-vous uniquement
@@ -466,7 +466,7 @@ export default function Contact() {
                     <div>
                       <h3 className="text-xl font-bold text-primary-900 mb-2">Zone d'intervention</h3>
                       <p className="text-gray-700 leading-relaxed">
-                        Nous intervenons dans tout le Haut-Jura et les départements limitrophes.
+                        Nous intervenons dans le Jura, les régions limitrophes et la Suisse romande.
                       </p>
                       <p className="text-sm text-emerald-600 font-semibold mt-2">
                         Déplacement gratuit pour devis
@@ -485,10 +485,7 @@ export default function Contact() {
                     <div>
                       <h3 className="text-xl font-bold text-primary-900 mb-2">Horaires d'ouverture</h3>
                       <p className="text-gray-700">
-                        <span className="font-semibold">Lundi - Vendredi:</span> 9h00 - 18h00
-                      </p>
-                      <p className="text-gray-700">
-                        <span className="font-semibold">Samedi:</span> Sur rendez-vous
+                        <span className="font-semibold">Lundi-Samedi:</span> Sur rendez-vous
                       </p>
                       <p className="text-gray-700">
                         <span className="font-semibold">Dimanche:</span> Fermé
@@ -526,7 +523,7 @@ export default function Contact() {
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <a
-                href="tel:+33XXXXXXXXX"
+                href="tel:+33647169317"
                 className="group bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white px-12 py-5 rounded-full font-bold text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

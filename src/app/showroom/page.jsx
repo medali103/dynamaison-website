@@ -1,11 +1,81 @@
-'use client'
+﻿'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
+const GOOGLE_REVIEWS_URL =
+  'https://www.google.com/maps/place/DynaMaison+SAS/@46.6311772,4.8824046,8.5z/data=!4m8!3m7!1s0x478cede7c54fb3e9:0x6b6a17429132d82a!8m2!3d46.3845698!4d5.7826615!9m1!1b1!16s%2Fg%2F11y66w4pby?hl=en-US&entry=ttu&g_ep=EgoyMDI2MDMxOC4xIKXMDSoASAFQAw%3D%3D'
+
+function ReviewAvatar({ src, alt, name }) {
+  const [imageFailed, setImageFailed] = useState(false)
+  const initials = (name || 'DM')
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('')
+  const palette = [
+    'from-orange-500 to-amber-500',
+    'from-sky-500 to-cyan-500',
+    'from-violet-500 to-fuchsia-500',
+    'from-emerald-500 to-teal-500',
+    'from-rose-500 to-pink-500',
+  ]
+  const colorIndex = (name || 'DM')
+    .split('')
+    .reduce((sum, char) => sum + char.charCodeAt(0), 0) % palette.length
+
+  return (
+    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/80 bg-gradient-to-br from-slate-100 via-white to-purple-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_12px_24px_rgba(15,23,42,0.12)] ring-4 ring-white/70">
+      {!imageFailed && src ? (
+        <img
+          src={src}
+          alt={alt}
+          className="w-full h-full object-cover"
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          onError={() => setImageFailed(true)}
+        />
+      ) : (
+        <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${palette[colorIndex]} text-white shadow-inner`}>
+          <span className="text-2xl font-bold tracking-tight">{initials || 'DM'}</span>
+        </div>
+      )}
+      {!imageFailed && src && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-slate-900/10 to-transparent" />
+      )}
+      {(!src || imageFailed) && (
+        <div className="pointer-events-none absolute -right-1 -top-1 rounded-full bg-white/90 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.25em] text-slate-500 shadow-sm">
+          Avis
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ReviewStars({ rating, size = 'w-4 h-4', justify = 'justify-start' }) {
+  return (
+    <div className={`flex gap-1 ${justify}`}>
+      {[...Array(5)].map((_, index) => (
+        <svg
+          key={index}
+          className={`${size} ${index < Math.round(rating) ? 'text-yellow-400' : 'text-gray-200'}`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      ))}
+    </div>
+  )
+}
 
 export default function Showroom() {
   const [particles, setParticles] = useState([])
-  const [selectedDay, setSelectedDay] = useState('weekday')
+  const [googleReviews, setGoogleReviews] = useState([])
+  const [googlePlace, setGooglePlace] = useState(null)
+  const [reviewsConfigured, setReviewsConfigured] = useState(false)
+  const [selectedReview, setSelectedReview] = useState(null)
 
   useEffect(() => {
     const generatedParticles = [...Array(20)].map((_, i) => ({
@@ -13,79 +83,43 @@ export default function Showroom() {
       left: Math.random() * 100,
       top: Math.random() * 100,
       delay: Math.random() * 6,
-      duration: 5 + Math.random() * 4
+      duration: 5 + Math.random() * 4,
     }))
     setParticles(generatedParticles)
   }, [])
 
-  const exhibits = [
-    {
-      title: 'Panneaux Solaires',
-      description: 'Différents modèles et puissances exposés',
-      image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&q=80',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      ),
-      color: 'from-yellow-500 to-orange-600'
-    },
-    {
-      title: 'Bornes de Recharge',
-      description: 'Testez nos bornes en conditions réelles',
-      image: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&q=80',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      ),
-      color: 'from-cyan-500 to-blue-600'
-    },
-    {
-      title: 'Carports & Pergolas',
-      description: 'Maquettes et échantillons de matériaux',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      ),
-      color: 'from-emerald-500 to-teal-600'
-    },
-    {
-      title: 'Cuisines Extérieures',
-      description: 'Espace démonstration grandeur nature',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-        </svg>
-      ),
-      color: 'from-red-500 to-orange-600'
-    },
-    {
-      title: 'Matériaux & Finitions',
-      description: '200+ échantillons de couleurs et textures',
-      image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=80',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-        </svg>
-      ),
-      color: 'from-purple-500 to-pink-600'
-    },
-    {
-      title: 'Espace Conseil',
-      description: 'Bureau dédié à votre projet personnalisé',
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      ),
-      color: 'from-indigo-500 to-blue-600'
+  useEffect(() => {
+    let cancelled = false
+
+    const loadGoogleReviews = async () => {
+      try {
+        const response = await fetch('/api/google-reviews')
+        if (!response.ok) {
+          throw new Error(`Google reviews request failed with ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        if (!cancelled) {
+          setGoogleReviews(Array.isArray(data.reviews) ? data.reviews : [])
+          setGooglePlace(data.place || null)
+          setReviewsConfigured(Boolean(data.configured))
+        }
+      } catch {
+        if (!cancelled) {
+          setGoogleReviews([])
+          setGooglePlace(null)
+          setReviewsConfigured(false)
+        }
+      }
     }
-  ]
+
+    loadGoogleReviews()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const benefits = [
     {
@@ -97,7 +131,7 @@ export default function Showroom() {
       ),
       title: 'Voir et toucher',
       description: 'Découvrez la qualité de nos produits en situation réelle',
-      color: 'from-blue-400 to-cyan-500'
+      color: 'from-blue-400 to-cyan-500',
     },
     {
       icon: (
@@ -106,8 +140,8 @@ export default function Showroom() {
         </svg>
       ),
       title: 'Conseil expert',
-      description: 'Échangez avec Charles et Mohamed sur votre projet',
-      color: 'from-purple-400 to-pink-500'
+      description: 'Échangez avec nous sur votre projet',
+      color: 'from-purple-400 to-pink-500',
     },
     {
       icon: (
@@ -117,7 +151,7 @@ export default function Showroom() {
       ),
       title: 'Devis immédiat',
       description: 'Repartez avec une estimation précise de votre projet',
-      color: 'from-green-400 to-emerald-600'
+      color: 'from-green-400 to-emerald-600',
     },
     {
       icon: (
@@ -127,57 +161,54 @@ export default function Showroom() {
       ),
       title: 'Visite libre',
       description: 'Prenez le temps de découvrir nos solutions à votre rythme',
-      color: 'from-orange-400 to-red-500'
-    }
+      color: 'from-orange-400 to-red-500',
+    },
   ]
-
-  const schedule = {
-    weekday: {
-      label: 'Lundi au Vendredi',
-      hours: '9h00 - 18h00',
-      note: 'Ouvert sans interruption'
-    },
-    saturday: {
-      label: 'Samedi',
-      hours: '9h00 - 12h00',
-      note: 'Sur rendez-vous recommandé'
-    },
-    sunday: {
-      label: 'Dimanche',
-      hours: 'Fermé',
-      note: 'Rendez-vous possible sur demande'
-    }
-  }
 
   const testimonials = [
     {
       name: 'Sophie M.',
-      location: 'Lavans-lès-St Claude',
-      text: 'Le showroom est magnifique ! J\'ai pu voir tous les produits en vrai et toucher les matériaux. Charles m\'a conseillée pendant 2h pour mon projet de pergola.',
+      location: 'Lavans-lès-Saint-Claude',
+      text: "Le showroom est magnifique ! J'ai pu voir tous les produits en vrai et toucher les matériaux. Charles m'a conseillée pendant 2 h pour mon projet de pergola.",
       rating: 5,
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80'
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80',
     },
     {
       name: 'Jean-Pierre L.',
       location: 'Saint-Claude',
-      text: 'Visite très instructive. Mohamed a pris le temps de m\'expliquer toutes les options pour ma borne de recharge. Je recommande la visite avant de faire son choix.',
+      text: "Visite très instructive. Mohamed a pris le temps de m'expliquer toutes les options pour ma borne de recharge. Je recommande la visite avant de faire son choix.",
       rating: 5,
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80'
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80',
     },
     {
       name: 'Marie D.',
       location: 'Haut-Jura',
-      text: 'Super accueil ! Le showroom permet vraiment de se projeter. J\'ai adoré l\'espace cuisine extérieure en démonstration. Visite indispensable !',
+      text: "Super accueil ! Le showroom permet vraiment de se projeter. J'ai adoré l'espace cuisine extérieure en démonstration. Visite indispensable !",
       rating: 5,
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80'
-    }
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80',
+    },
   ]
+
+  const fallbackReviews = testimonials.map((testimonial, index) => ({
+    id: `fallback-${index}`,
+    authorName: testimonial.name,
+    authorPhoto: testimonial.image,
+    rating: testimonial.rating,
+    relativeTime: testimonial.location,
+    text: testimonial.text,
+    url: GOOGLE_REVIEWS_URL,
+  }))
+
+  const displayedReviews = googleReviews.length > 0 ? googleReviews : fallbackReviews
+  const displayedRating = googlePlace?.rating || 5
+  const displayedReviewCount = googlePlace?.userRatingCount || null
+  const featuredReview = displayedReviews[0] || null
+  const secondaryReviews = displayedReviews.slice(1)
 
   return (
     <main className="overflow-hidden">
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center">
-        {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/90 via-purple-900/85 to-indigo-900/90 z-10"></div>
           <Image
@@ -189,7 +220,6 @@ export default function Showroom() {
           />
         </div>
 
-        {/* Floating particles */}
         {particles.length > 0 && (
           <div className="absolute inset-0 z-20">
             {particles.map((particle) => (
@@ -201,51 +231,47 @@ export default function Showroom() {
                   top: `${particle.top}%`,
                   animationDelay: `${particle.delay}s`,
                   animationDuration: `${particle.duration}s`,
-                  boxShadow: '0 0 8px rgba(216, 180, 254, 0.6)'
+                  boxShadow: '0 0 8px rgba(216, 180, 254, 0.6)',
                 }}
               ></div>
             ))}
           </div>
         )}
 
-        {/* Content */}
         <div className="relative z-30 container mx-auto px-4 text-center text-white">
           <div className="inline-block mb-6">
             <svg className="w-28 h-28 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
           </div>
-          
+
           <h1 className="text-5xl md:text-7xl font-heading font-bold mb-6">
             Notre <span className="text-purple-300">Showroom</span>
           </h1>
           <div className="w-32 h-1 bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 mx-auto mb-8 rounded-full"></div>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-100 leading-relaxed">
-            Découvrez nos solutions en conditions réelles dans notre espace d'exposition de 200 m²
+            Découvrez nos solutions en conditions réelles dans notre espace d'exposition
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link 
-              href="#reservation" 
+            <Link
+              href="#reservation"
               className="bg-gradient-to-r from-purple-600 to-pink-700 hover:from-purple-700 hover:to-pink-800 text-white px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-2xl transform hover:scale-105"
             >
               Réserver ma visite
             </Link>
-            <a 
-              href="#horaires" 
+            <a
+              href="#horaires"
               className="border-2 border-white text-white hover:bg-white hover:text-purple-900 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300"
             >
               Voir les horaires
             </a>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-16 max-w-2xl mx-auto">
             {[
-              { value: '200 m²', label: 'Surface' },
-              { value: '6 espaces', label: 'Zones expo' },
               { value: 'Gratuit', label: 'Visite' },
-              { value: 'Sur RDV', label: 'Conseil privé' }
+              { value: 'Sur RDV', label: 'Conseil privé' },
             ].map((stat, i) => (
               <div key={i} className="glass p-6 rounded-2xl border border-white/20 bg-white/5 backdrop-blur-sm">
                 <div className="text-3xl font-bold text-purple-300 mb-2">{stat.value}</div>
@@ -259,7 +285,7 @@ export default function Showroom() {
       {/* Benefits Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-purple-100 to-transparent rounded-full -translate-y-48 translate-x-48"></div>
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-heading font-bold text-primary-900 mb-6">
@@ -278,62 +304,8 @@ export default function Showroom() {
                 <div className={`w-20 h-20 bg-gradient-to-r ${benefit.color} rounded-2xl flex items-center justify-center text-white mb-6 shadow-xl group-hover:scale-110 transition-transform duration-300`}>
                   {benefit.icon}
                 </div>
-                <h3 className="text-xl font-heading font-bold text-primary-900 mb-3">
-                  {benefit.title}
-                </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {benefit.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Exhibits Section */}
-      <section className="py-20 bg-white relative overflow-hidden">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-heading font-bold text-primary-900 mb-6">
-              Nos <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Espaces</span>
-            </h2>
-            <div className="w-32 h-1 bg-gradient-to-r from-purple-500 to-pink-600 mx-auto rounded-full mb-6"></div>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-              6 zones d'exposition pour découvrir toutes nos solutions
-            </p>
-          </div>
-
-          <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {exhibits.map((exhibit, index) => (
-              <div
-                key={exhibit.title}
-                className="group relative overflow-hidden rounded-2xl hover-lift"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="relative h-80">
-                  <Image
-                    src={exhibit.image}
-                    alt={exhibit.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                  
-                  <div className="absolute top-4 right-4">
-                    <div className={`w-14 h-14 bg-gradient-to-r ${exhibit.color} rounded-xl flex items-center justify-center text-white shadow-xl`}>
-                      {exhibit.icon}
-                    </div>
-                  </div>
-
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-2xl font-heading font-bold text-white mb-2">
-                      {exhibit.title}
-                    </h3>
-                    <p className="text-gray-200">
-                      {exhibit.description}
-                    </p>
-                  </div>
-                </div>
+                <h3 className="text-xl font-heading font-bold text-primary-900 mb-3">{benefit.title}</h3>
+                <p className="text-gray-700 leading-relaxed">{benefit.description}</p>
               </div>
             ))}
           </div>
@@ -351,42 +323,19 @@ export default function Showroom() {
           </div>
 
           <div className="max-w-4xl mx-auto">
-            {/* Day selector */}
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
-              {Object.keys(schedule).map((day) => (
-                <button
-                  key={day}
-                  onClick={() => setSelectedDay(day)}
-                  className={`px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 ${
-                    selectedDay === day
-                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-2xl scale-105'
-                      : 'glass text-primary-900 border border-gray-300 hover:border-purple-400'
-                  }`}
-                >
-                  {schedule[day].label}
-                </button>
-              ))}
-            </div>
-
-            {/* Selected schedule */}
             <div className="glass p-12 rounded-3xl border border-gray-200 bg-white shadow-xl text-center">
               <div className="inline-block mb-6">
                 <svg className="w-20 h-20 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-3xl font-heading font-bold text-primary-900 mb-4">
-                {schedule[selectedDay].label}
-              </h3>
+              <h3 className="text-3xl font-heading font-bold text-primary-900 mb-4">Horaires</h3>
               <div className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
-                {schedule[selectedDay].hours}
+                Lundi-Samedi : Sur rendez-vous
               </div>
-              <p className="text-xl text-gray-600">
-                {schedule[selectedDay].note}
-              </p>
+              <p className="text-xl text-gray-600">Dimanche : Fermé</p>
             </div>
 
-            {/* Additional info */}
             <div className="mt-12 grid md:grid-cols-3 gap-6">
               <div className="glass p-6 rounded-2xl border border-gray-200 bg-white text-center">
                 <div className="text-purple-600 mb-3">
@@ -395,7 +344,7 @@ export default function Showroom() {
                   </svg>
                 </div>
                 <h4 className="font-bold text-primary-900 mb-2">Sur rendez-vous</h4>
-                <p className="text-sm text-gray-600">Conseil privé disponible</p>
+                <p className="text-sm text-gray-600">Conseil privé disponible et gratuit</p>
               </div>
 
               <div className="glass p-6 rounded-2xl border border-gray-200 bg-white text-center">
@@ -422,51 +371,203 @@ export default function Showroom() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Google Reviews Section */}
       <section className="py-20 bg-white relative overflow-hidden">
-        <div className="container mx-auto px-4">
+        <div className="absolute inset-y-0 left-0 w-80 bg-gradient-to-r from-purple-50 to-transparent"></div>
+        <div className="absolute inset-y-0 right-0 w-80 bg-gradient-to-l from-pink-50 to-transparent"></div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-purple-100 shadow-sm mb-6">
+              <span className="text-lg font-bold text-primary-900">Google</span>
+              <span className="w-2 h-2 rounded-full bg-green-500"></span>
+              <span className="text-sm text-gray-600">
+                {reviewsConfigured && googleReviews.length > 0
+                  ? 'Avis synchronisés'
+                  : 'Section prête pour la synchronisation Google'}
+              </span>
+            </div>
+
             <h2 className="text-4xl md:text-6xl font-heading font-bold text-primary-900 mb-6">
-              Ils ont <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">visité</span>
+              Avis <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Google</span>
             </h2>
-            <div className="w-32 h-1 bg-gradient-to-r from-purple-500 to-pink-600 mx-auto rounded-full"></div>
+            <div className="w-32 h-1 bg-gradient-to-r from-purple-500 to-pink-600 mx-auto rounded-full mb-6"></div>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+              Découvrez ce que les visiteurs pensent de l'expérience DynaMaison.
+            </p>
           </div>
 
-          <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="glass p-8 rounded-2xl hover-lift border border-gray-200 bg-white"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden">
-                    <Image
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-primary-900">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-600">{testimonial.location}</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-
-                <p className="text-gray-700 leading-relaxed italic">
-                  "{testimonial.text}"
+          <div className="max-w-6xl mx-auto mb-12 glass rounded-3xl border border-purple-100 bg-gradient-to-r from-white to-purple-50 p-8 shadow-xl">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+              <div>
+                <p className="text-sm uppercase tracking-[0.25em] text-purple-600 font-semibold mb-3">
+                  {googlePlace?.name || 'DynaMaison SAS'}
                 </p>
+                <div className="flex items-center gap-4 flex-wrap mb-3">
+                  <span className="text-5xl font-bold text-primary-900">{displayedRating.toFixed(1)}</span>
+                  <div>
+                    <div className="flex gap-1 mb-1">
+                      {[...Array(5)].map((_, index) => (
+                        <svg
+                          key={index}
+                          className={`w-6 h-6 ${index < Math.round(displayedRating) ? 'text-yellow-400' : 'text-gray-200'}`}
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="text-gray-600">
+                      {displayedReviewCount
+                        ? `${displayedReviewCount} avis publiés sur Google`
+                        : 'Avis visibles sur Google Maps'}
+                    </p>
+                  </div>
+                </div>
               </div>
-            ))}
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href={googlePlace?.googleMapsUri || GOOGLE_REVIEWS_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-gradient-to-r from-purple-600 to-pink-700 hover:from-purple-700 hover:to-pink-800 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-xl text-center"
+                >
+                  Voir tous les avis
+                </a>
+                <a
+                  href={googlePlace?.googleMapsUri || GOOGLE_REVIEWS_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="border-2 border-purple-200 text-primary-900 hover:border-purple-400 hover:bg-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 text-center"
+                >
+                  Ouvrir Google Maps
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-6xl mx-auto grid gap-8 xl:grid-cols-[1.15fr_0.85fr] items-start">
+            {featuredReview && (
+              <article className="relative overflow-hidden rounded-[2rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,_rgba(168,85,247,0.2),_transparent_35%),linear-gradient(180deg,_rgba(255,255,255,0.98),_rgba(248,250,252,0.96))] p-8 md:p-10 shadow-[0_30px_80px_rgba(15,23,42,0.12)]">
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500"></div>
+                <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                  <div className="flex items-center gap-5">
+                    <div className="relative">
+                      <ReviewAvatar
+                        src={featuredReview.authorPhoto}
+                        alt={featuredReview.authorName}
+                        name={featuredReview.authorName}
+                      />
+                      <div className="absolute -bottom-2 -right-2 rounded-full border-4 border-white bg-emerald-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.25em] text-white">
+                        Avis
+                      </div>
+                    </div>
+                    <div>
+                      <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-purple-500">
+                        Témoignage mis en avant
+                      </p>
+                      <h3 className="text-2xl font-bold text-primary-900">{featuredReview.authorName}</h3>
+                      <p className="mt-1 text-sm text-slate-500">{featuredReview.relativeTime}</p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-purple-100 bg-white/80 px-5 py-4 shadow-sm backdrop-blur-sm">
+                    <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.35em] text-purple-500">Google</p>
+                    <ReviewStars rating={featuredReview.rating || 5} size="w-5 h-5" />
+                  </div>
+                </div>
+
+                <blockquote className="mt-8 text-xl leading-9 text-slate-700 italic">
+                  "{featuredReview.text}"
+                </blockquote>
+
+                <div className="mt-8 flex flex-col gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedReview(featuredReview)}
+                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-200 transition-transform duration-300 hover:scale-[1.02]"
+                  >
+                    Lire l'avis complet
+                  </button>
+                  <a
+                    href={featuredReview.url || GOOGLE_REVIEWS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-3 text-sm font-semibold text-purple-600 transition-colors duration-300 hover:text-pink-600"
+                  >
+                    Voir sur Google
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </a>
+                </div>
+              </article>
+            )}
+
+            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-1">
+              {secondaryReviews.map((review, index) => (
+                <article
+                  key={review.id || `${review.authorName}-${index + 1}`}
+                  className="group relative overflow-hidden rounded-[1.75rem] border border-white/80 bg-white/95 p-7 shadow-[0_22px_60px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(168,85,247,0.18)]"
+                >
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent"></div>
+
+                  <div className="mb-6 flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <ReviewAvatar
+                        src={review.authorPhoto}
+                        alt={review.authorName}
+                        name={review.authorName}
+                      />
+                      <div>
+                        <h4 className="text-xl font-bold leading-tight text-primary-900">{review.authorName}</h4>
+                        <p className="mt-1 text-sm text-slate-500">{review.relativeTime}</p>
+                      </div>
+                    </div>
+
+                    <div className="shrink-0 text-right">
+                      <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-purple-500">Google</p>
+                      <ReviewStars rating={review.rating || 5} justify="justify-end" />
+                    </div>
+                  </div>
+
+                  <p
+                    className="min-h-[9rem] text-lg leading-8 text-slate-700 italic"
+                    style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 4,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    "{review.text}"
+                  </p>
+
+                  <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-5">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedReview(review)}
+                      className="text-sm font-semibold text-purple-600 transition-colors duration-300 hover:text-pink-600"
+                    >
+                      Lire la suite
+                    </button>
+                    <a
+                      href={review.url || GOOGLE_REVIEWS_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors duration-300 hover:text-primary-900"
+                    >
+                      Voir sur Google
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -483,7 +584,6 @@ export default function Showroom() {
 
           <div className="max-w-5xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8 items-start">
-              {/* Map */}
               <div className="glass rounded-3xl overflow-hidden border border-gray-200 shadow-xl h-96">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d87445.82426634778!2d5.8636!3d46.3875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x478d0c7d3c8e2b8f%3A0x408ab2ae4bb3e90!2sLavans-l%C3%A8s-Saint-Claude!5e0!3m2!1sfr!2sfr!4v1234567890"
@@ -496,7 +596,6 @@ export default function Showroom() {
                 ></iframe>
               </div>
 
-              {/* Info */}
               <div className="space-y-6">
                 <div className="glass p-8 rounded-2xl border border-gray-200 bg-white">
                   <div className="flex items-start gap-4">
@@ -507,7 +606,6 @@ export default function Showroom() {
                     </div>
                     <div>
                       <h3 className="font-bold text-primary-900 mb-2">Adresse</h3>
-                      <p className="text-gray-700">Showroom DynaMaison</p>
                       <p className="text-gray-700">Lavans-lès-Saint-Claude</p>
                       <p className="text-gray-700">39170 Haut-Jura</p>
                     </div>
@@ -584,7 +682,7 @@ export default function Showroom() {
               </Link>
 
               <a
-                href="tel:+33XXXXXXXXX"
+                href="tel:+33647169317"
                 className="glass border-2 border-white/30 text-white hover:bg-white/20 px-12 py-5 rounded-full font-bold text-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm flex items-center justify-center gap-3"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -594,7 +692,6 @@ export default function Showroom() {
               </a>
             </div>
 
-            {/* Stats */}
             <div className="grid md:grid-cols-3 gap-6 text-white">
               <div className="glass p-6 rounded-2xl border border-white/20 backdrop-blur-xl">
                 <div className="text-4xl font-bold text-purple-300 mb-2">Gratuit</div>
@@ -609,14 +706,78 @@ export default function Showroom() {
               </div>
 
               <div className="glass p-6 rounded-2xl border border-white/20 backdrop-blur-xl">
-                <div className="text-4xl font-bold text-purple-300 mb-2">7j/7</div>
+                <div className="text-4xl font-bold text-purple-300 mb-2">6j/7</div>
                 <h3 className="font-bold mb-1">Sur rendez-vous</h3>
-                <p className="text-gray-300 text-sm">Y compris dimanche</p>
+                <p className="text-gray-300 text-sm">Sauf le dimanche</p>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {selectedReview && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <button
+            type="button"
+            aria-label="Fermer la fenêtre"
+            className="absolute inset-0 bg-slate-950/70 backdrop-blur-md"
+            onClick={() => setSelectedReview(null)}
+          />
+
+          <div className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-white/20 bg-[linear-gradient(180deg,_rgba(255,255,255,0.98),_rgba(248,250,252,0.97))] shadow-[0_40px_120px_rgba(15,23,42,0.35)]">
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500"></div>
+
+            <div className="p-8 md:p-10">
+              <div className="flex items-start justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <ReviewAvatar
+                    src={selectedReview.authorPhoto}
+                    alt={selectedReview.authorName}
+                    name={selectedReview.authorName}
+                  />
+                  <div>
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-purple-500">
+                      Avis Google
+                    </p>
+                    <h3 className="text-2xl font-bold text-primary-900">{selectedReview.authorName}</h3>
+                    <p className="mt-1 text-sm text-slate-500">{selectedReview.relativeTime}</p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedReview(null)}
+                  className="rounded-full border border-slate-200 bg-white p-3 text-slate-500 transition-colors duration-300 hover:text-slate-900"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="mt-6 flex items-center justify-between gap-4 rounded-2xl border border-purple-100 bg-purple-50/60 px-5 py-4">
+                <ReviewStars rating={selectedReview.rating || 5} size="w-5 h-5" />
+                <a
+                  href={selectedReview.url || GOOGLE_REVIEWS_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-purple-600 transition-colors duration-300 hover:text-pink-600"
+                >
+                  Voir sur Google
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+
+              <blockquote className="mt-8 max-h-[50vh] overflow-y-auto pr-2 text-lg leading-9 text-slate-700 italic">
+                "{selectedReview.text}"
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
+

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
 export default function Carports() {
-  const [selectedType, setSelectedType] = useState('solar')
+  const [selectedType, setSelectedType] = useState('double')
   const [particles, setParticles] = useState([])
 
   useEffect(() => {
@@ -20,39 +20,19 @@ export default function Carports() {
 
   const carportTypes = [
     {
-      id: 'solar',
-      name: 'Carport Solaire',
-      icon: (
-        <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      ),
-      color: 'from-yellow-500 to-orange-600',
-      description: 'Carport avec panneaux photovoltaïques intégrés',
-      power: '3 à 9 kWc',
-      image: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&q=80',
-      features: [
-        'Production d\'énergie solaire',
-        'Protection contre les intempéries',
-        'Structure aluminium ou bois',
-        'Design moderne et élégant',
-        'Charge 1 à 2 véhicules'
-      ]
-    },
-    {
       id: 'double',
-      name: 'Carport Double',
+      name: 'Carport indépendant',
       icon: (
         <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
         </svg>
       ),
       color: 'from-blue-500 to-cyan-600',
-      description: 'Abri pour deux véhicules côte à côte',
-      power: 'Jusqu\'à 6 kWc',
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+      description: 'Carport fixé au sol',
+      power: 'Espace modulable',
+      image: '/images/bornes-docx/image6.jpeg',
       features: [
-        'Espace pour 2 véhicules',
+        'Espace pour 1 ou plusieurs véhicules',
         'Option panneaux solaires',
         'Dimensions personnalisables',
         'Montage rapide',

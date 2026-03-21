@@ -30,42 +30,42 @@ const [particles, setParticles] = useState<Particle[]>([])
       name: 'Panneaux solaires', 
       href: '/panneaux-solaires', 
       color: 'from-yellow-400 to-orange-500',
-      image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&q=80',
+      image: '/images/accueil/activity-solar.jpeg',
       description: 'Production d\'énergie solaire'
     },
     { 
       name: 'Bornes de recharge', 
       href: '/bornes-recharge', 
       color: 'from-blue-400 to-blue-600',
-      image: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&q=80',
+      image: '/images/accueil/activity-charging.jpeg',
       description: 'Mobilité électrique'
     },
     { 
       name: 'Carports', 
       href: '/carports', 
       color: 'from-gray-400 to-gray-600',
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+      image: '/images/accueil/activity-carport.jpeg',
       description: 'Protection véhicules'
     },
     { 
       name: 'Pergolas', 
       href: '/pergolas', 
       color: 'from-green-400 to-green-600',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80',
+      image: '/images/accueil/activity-pergola.jpeg',
       description: 'Espaces de vie extérieurs'
     },
     { 
       name: 'Poolhouses', 
       href: '/poolhouses', 
       color: 'from-cyan-400 to-blue-500',
-      image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80',
+      image: '/images/accueil/activity-poolhouse.jpeg',
       description: 'Confort piscine'
     },
     { 
       name: 'Cuisines extérieures', 
       href: '/cuisines-exterieures', 
       color: 'from-red-400 to-orange-500',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80',
+      image: '/images/accueil/activity-outdoor-kitchen.jpeg',
       description: 'Art culinaire extérieur'
     },
   ]
@@ -113,10 +113,10 @@ const [particles, setParticles] = useState<Particle[]>([])
             </h1>
             <div className="w-32 h-1 bg-gradient-to-r from-solar-orange to-solar-yellow mx-auto mb-8 rounded-full"></div>
             <p className="text-2xl md:text-3xl font-medium mb-6 text-solar-yellow">
-              Solutions photovoltaïques et aménagements extérieurs
+              Solutions solaires et aménagements extérieurs
             </p>
             <p className="text-lg md:text-xl mb-12 max-w-3xl mx-auto text-gray-100 leading-relaxed">
-              Électriciens de métier spécialisés dans les solutions renouvelables et les aménagements extérieurs durables dans le Haut-Jura
+              Électriciens de métier spécialisés dans les solutions renouvelables et les aménagements extérieurs durables
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -158,21 +158,18 @@ const [particles, setParticles] = useState<Particle[]>([])
               {/* Left: Image */}
               <div className="relative h-96 rounded-3xl overflow-hidden group">
                 <Image
-                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80"
-                  alt="Notre équipe"
+                  src="/images/accueil/about-founders.jpeg"
+                  alt="Charles et Mohamed"
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 bg-gradient-to-r from-solar-blue to-solar-green rounded-full flex items-center justify-center text-white font-bold text-xl shadow-2xl">
-                      C&M
-                    </div>
-                    <div className="text-white">
-                      <p className="font-semibold text-lg">Charles et Mohamed</p>
-                      <p className="text-sm text-gray-200">Fondateurs - Électriciens qualifiés</p>
-                    </div>
+                  <div className="glass p-6 rounded-2xl border border-white/20 bg-black/20 text-white">
+                    <p className="font-semibold text-lg mb-2">Charles et Mohamed</p>
+                    <p className="text-sm text-gray-100 leading-relaxed">
+                      « Conscients des enjeux environnementaux, électriciens de métier, nous sommes spécialisés dans les solutions renouvelables notamment les panneaux et ombrières photovoltaïques, ainsi que les bornes de recharges. »
+                    </p>
                   </div>
                 </div>
               </div>
@@ -269,7 +266,7 @@ const [particles, setParticles] = useState<Particle[]>([])
             <div className="glass p-8 rounded-2xl hover-lift border border-white/30 bg-white/60 group">
               <div className="relative h-48 rounded-xl overflow-hidden mb-6">
                 <Image
-                  src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=600&q=80"
+                  src="/images/accueil/expertise-quality.jpeg"
                   alt="Qualité européenne"
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -292,7 +289,7 @@ const [particles, setParticles] = useState<Particle[]>([])
             <div className="glass p-8 rounded-2xl hover-lift border border-white/30 bg-white/60 group">
               <div className="relative h-48 rounded-xl overflow-hidden mb-6">
                 <Image
-                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80"
+                  src="/images/accueil/expertise-proximity.jpeg"
                   alt="Proximité"
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -375,7 +372,7 @@ const [particles, setParticles] = useState<Particle[]>([])
             </h2>
             <div className="w-32 h-1 bg-gradient-to-r from-solar-orange to-solar-yellow mx-auto rounded-full"></div>
             <p className="text-xl text-gray-300 mt-6 max-w-2xl mx-auto">
-              Découvrez quelques-unes de nos plus belles réalisations dans le Haut-Jura
+              Découvrez quelques-unes de nos réalisations
             </p>
           </div>
           
